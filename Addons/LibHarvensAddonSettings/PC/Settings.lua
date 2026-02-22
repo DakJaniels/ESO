@@ -232,7 +232,7 @@ local createControlFunctions = {
 					control.label:SetText(formattedValue)
 				end
 				self:ValueChanged(formattedValue)
-		end)
+			end)
 	end,
 	[LibHarvensAddonSettings.ST_BUTTON] = function(self, lastControl)
 		self.control, self.controlKey = LibHarvensAddonSettings.buttonPool:AcquireObject()
@@ -250,21 +250,21 @@ local createControlFunctions = {
 		editControl:SetHandler("OnEnter", function(control)
 				self:ValueChanged(control:GetText())
 				control:LoseFocus()
-		end)
+			end)
 		editControl:SetHandler("OnEscape", function(control)
 				control:SetText(self.getFunction() or "")
 				control:LoseFocus()
-		end)
+			end)
 		editControl:SetHandler("OnFocusLost", function(editControl)
 				self:ValueChanged(editControl:GetText())
 				editControl:SetColor(ZO_NORMAL_TEXT:UnpackRGB())
 				editControl:SetText(self.getFunction() or "")
 				editControl:SetCursorPosition(0)
-		end)
+			end)
 		editControl:SetHandler("OnFocusGained", function(control)
 				control:SetColor(ZO_HIGHLIGHT_TEXT:UnpackRGB())
 				control:TakeFocus()
-		end)
+			end)
 	end,
 	[LibHarvensAddonSettings.ST_DROPDOWN] = function(self, lastControl)
 		self.control, self.controlKey = LibHarvensAddonSettings.dropdownPool:AcquireObject()
@@ -292,7 +292,7 @@ local createControlFunctions = {
 		end
 		self.control:GetNamedChild("ColorSection"):SetHandler("OnMouseUp", function()
 				COLOR_PICKER:Show(OnColorSet, self.getFunction())
-		end)
+			end)
 		return self.control
 	end,
 	[LibHarvensAddonSettings.ST_ICONPICKER] = function(self, lastControl)
@@ -356,6 +356,7 @@ local setupControlFunctions = {
 		self.setFunction = params.setFunction
 		self.getFunction = params.getFunction
 		self.default = params.default
+		self.ignoreDefault = params.ignoreDefault
 		self.disable = params.disable
 	end,
 	[LibHarvensAddonSettings.ST_SLIDER] = function(self, params)
@@ -369,6 +370,7 @@ local setupControlFunctions = {
 		self.setFunction = params.setFunction
 		self.getFunction = params.getFunction
 		self.default = params.default
+		self.ignoreDefault = params.ignoreDefault
 		self.disable = params.disable
 	end,
 	[LibHarvensAddonSettings.ST_BUTTON] = function(self, params)
@@ -376,6 +378,7 @@ local setupControlFunctions = {
 		self.labelText = params.label
 		self.tooltipText = params.tooltip
 		self.default = params.default
+		self.ignoreDefault = params.ignoreDefault
 		self.disable = params.disable
 		self.buttonText = params.buttonText
 	end,
@@ -387,6 +390,7 @@ local setupControlFunctions = {
 		self.setFunction = params.setFunction
 		self.getFunction = params.getFunction
 		self.default = params.default
+		self.ignoreDefault = params.ignoreDefault
 		self.disable = params.disable
 	end,
 	[LibHarvensAddonSettings.ST_DROPDOWN] = function(self, params)
@@ -396,6 +400,7 @@ local setupControlFunctions = {
 		self.setFunction = params.setFunction
 		self.getFunction = params.getFunction
 		self.default = params.default
+		self.ignoreDefault = params.ignoreDefault
 		self.disable = params.disable
 	end,
 	[LibHarvensAddonSettings.ST_LABEL] = function(self, params)
@@ -412,6 +417,7 @@ local setupControlFunctions = {
 		self.setFunction = params.setFunction
 		self.getFunction = params.getFunction
 		self.default = params.default
+		self.ignoreDefault = params.ignoreDefault
 		self.disable = params.disable
 	end,
 	[LibHarvensAddonSettings.ST_ICONPICKER] = function(self, params)
@@ -421,6 +427,7 @@ local setupControlFunctions = {
 		self.setFunction = params.setFunction
 		self.getFunction = params.getFunction
 		self.default = params.default
+		self.ignoreDefault = params.ignoreDefault
 		self.disable = params.disable
 	end
 }
@@ -511,13 +518,13 @@ function LibHarvensAddonSettings.AddonSettingsControl:CreateControl(lastControl)
 				if self.OnMouseEnterOriginal then
 					self.OnMouseEnterOriginal(...)
 				end
-		end)
+			end)
 		self.control:SetHandler("OnMouseExit", function(...)
 				ClearTooltip(InformationTooltip)
 				if self.OnMouseExitOriginal then
 					self.OnMouseExitOriginal(...)
 				end
-		end)
+			end)
 	end
 
 	self:SetEnabled(not self:IsDisabled())
@@ -737,7 +744,7 @@ function LibHarvensAddonSettings:CreateAddonSettingsPanel()
 			addonSettings:CreateControls()
 			self.container.endHeight = addonSettings:GetOverallHeight() + 8
 			self.openTimeline:PlayFromStart()
-	end)
+		end)
 
 	local orgUpdatePanelVisibility = ZO_KeyboardOptions.UpdatePanelVisibility
 	function ZO_KeyboardOptions.UpdatePanelVisibility(...)
@@ -796,7 +803,7 @@ function LibHarvensAddonSettings:CreateControlPools()
 					width = math.max(width, ZO_LabelUtils_GetTextDimensions(items[i].name or "", "ZoFontGame") + 36)
 				end
 				popup:SetWidth(width)
-		end)
+			end)
 		popup:ClearAnchors()
 		popup:SetAnchor(TOPRIGHT, nil, BOTTOMRIGHT)
 		popup:SetDrawTier(DT_HIGH)
@@ -884,7 +891,7 @@ end
 function LibHarvensAddonSettings:CreateAddonList()
 	table.sort(LibHarvensAddonSettings.addons, function(el1, el2)
 			return el1.name < el2.name
-	end)
+		end)
 
 	local control, template
 	local prev = nil
